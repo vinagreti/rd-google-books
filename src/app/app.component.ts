@@ -15,7 +15,8 @@ export class AppComponent {
   searchForm: FormGroup;
 
   private searchTerm = new Subject<string>();
-  private _searchTerm;
+  private _searchTerm: string;
+  private regexSearchTerm: RegExp;
 
   constructor(
     private gbService: GoogleBooksService,
@@ -34,6 +35,7 @@ export class AppComponent {
       .subscribe(term => {
         if(term){
           this._searchTerm = term;
+          this.regexSearchTerm = new RegExp(`(${term})`, 'ig');
           this.search();
         } else {
           this.results = undefined;
@@ -64,30 +66,14 @@ export class AppComponent {
     });
   }
 
-  private _highlightWords = (html: string): string => { // bloco copiado d ainternet. Pode ser melhorado com uso mais inteligente de Regex
-    let regExp = new RegExp(`(${this._searchTerm})`, 'i');
-    let results = regExp.exec(html);
-
-    if (results) {
-      let before = html.substr(0, results.index);
-      let after = html.substr(results.index + this._searchTerm.length);
-
-      let indexOpenTag = before.lastIndexOf('<');
-      let indexCloseTag = before.lastIndexOf('>');
-      let indexOpenTagAfter = after.indexOf('<');
-      let indexCloseTagAfter = after.indexOf('>');
-
-      if (indexOpenTag <= indexCloseTag && indexOpenTagAfter <= indexCloseTagAfter) {
-        return `${before}<b>${results[0]}</b>${this._highlightWords(after)}`;
-      } else {
-        return `${before}${results[0]}${this._highlightWords(after)}`;
-      }
-    } else {
-      return html;
-    }
+  /*
+  * Should be improved to remove diacritics
+  */
+  private addHighlightTags = (html: string): string => {
+    return html.replace(this.regexSearchTerm, '<b>$1</b>');
   }
 
   highlightWords = (html: string): SafeHtml => {
-    return this.sanitizer.bypassSecurityTrustHtml(this._highlightWords(html));
+    return this.sanitizer.bypassSecurityTrustHtml(this.addHighlightTags(html));
   }
 }
