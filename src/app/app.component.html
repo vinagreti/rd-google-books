@@ -11,7 +11,7 @@
 
 <div class="results-wrapper">
 	<div *ngFor="let result of results" class="result-wrapper">
-		<div><strong>Title:</strong> {{result.volumeInfo.title}}</div>
+		<div><strong>Title:</strong> <span [innerHtml]="highlightWords(result.volumeInfo.title)"></span></div>
 		<div *ngIf="result.searchInfo">
 			<strong>Snippet:</strong> <span [innerHtml]="highlightWords(result.searchInfo.textSnippet)"></span>
 		</div>
