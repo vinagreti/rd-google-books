@@ -1,20 +1,22 @@
-<h1>Google Books Finder</h1>
+<div class="content">
+	<h1>Google Books Finder</h1>
 
-<form class="form" role="form" [formGroup]="searchForm">
-  <input type="text" name="searchTerm" minlength="3" formControlName="searchTerm">
-</form>
+	<form class="form" role="form" [formGroup]="searchForm">
+	  <input type="text" name="searchTerm" minlength="3" formControlName="searchTerm">
+	</form>
 
-<h2 *ngIf="books" [ngSwitch]="books?.length == 0">
-	<span *ngSwitchCase="false">Resultados para "{{searchForm.controls.searchTerm.value}}".</span>
-	<span *ngSwitchCase="true">Nenhum bookados enonctrado para "{{searchForm.controls.searchTerm.value}}".</span>
-</h2>
+	<h2 *ngIf="books" [ngSwitch]="books?.length == 0">
+		<span *ngSwitchCase="false">Resultados para "{{searchForm.controls.searchTerm.value}}".</span>
+		<span *ngSwitchCase="true">Nenhum bookados enonctrado para "{{searchForm.controls.searchTerm.value}}".</span>
+	</h2>
 
-<div class="books-wrapper">
-	<div *ngFor="let book of books" class="book-wrapper">
-		<app-book-cover [book]="book" highlight="{{searchForm.controls.searchTerm.value}}"></app-book-cover>
+	<div class="books-wrapper">
+		<div *ngFor="let book of books" class="book-wrapper">
+			<app-book-cover [book]="book" highlight="{{searchForm.controls.searchTerm.value}}"></app-book-cover>
+		</div>
 	</div>
-</div>
 
-<div class="errors-wrapper">
-	{{errors  | json}}
+	<div class="errors-wrapper">
+		{{errors  | json}}
+	</div>
 </div>

@@ -24,7 +24,7 @@ export class BookCoverComponent implements OnInit {
 		return html.replace(this.highlight, '<b>$1</b>');
 	}
 
-	highlightWords = (html: string): SafeHtml => {
+	highlightWords = (html: string = ''): SafeHtml => {
 		return this.sanitizer.bypassSecurityTrustHtml(this.addHighlightTags(html));
 	}
 }
