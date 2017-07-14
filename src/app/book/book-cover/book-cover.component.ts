@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Book } from './../book.model';
 
 @Component({
 	selector: 'app-book-cover',
@@ -8,20 +9,21 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class BookCoverComponent implements OnInit {
 
-	@Input() book: any;
+	@Input() book: Book;
 	@Input() highlight: string;
 
 	private regexSearchTerm: RegExp;
 
 	constructor(
     	private sanitizer: DomSanitizer
-	) { }
+	) {}
 
 	ngOnInit() {
+		this.regexSearchTerm = new RegExp(`(${this.highlight})`, 'ig');
 	}
 
 	private addHighlightTags = (html: string): string => {
-		return html.replace(this.highlight, '<b>$1</b>');
+		return html.replace(this.regexSearchTerm, '<b>$1</b>');
 	}
 
 	highlightWords = (html: string = ''): SafeHtml => {

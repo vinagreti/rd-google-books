@@ -10,9 +10,14 @@
 		<span *ngSwitchCase="true">Nenhum bookados enonctrado para "{{searchForm.controls.searchTerm.value}}".</span>
 	</h2>
 
-	<div class="books-wrapper">
-		<div *ngFor="let book of books" class="book-wrapper">
-			<app-book-cover [book]="book" highlight="{{searchForm.controls.searchTerm.value}}"></app-book-cover>
+	<div [ngSwitch]="searchingBooks">
+		
+		<h2 *ngSwitchCase="true">Buscando livros. Aguarde...</h2>
+		
+		<div class="books-wrapper" *ngSwitchCase="false">
+			<div *ngFor="let book of books" class="book-wrapper">
+				<app-book-cover [book]="book" highlight="{{searchForm.controls.searchTerm.value}}"></app-book-cover>
+			</div>
 		</div>
 	</div>
 
