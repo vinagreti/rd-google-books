@@ -1,10 +1,5 @@
-.results-wrapper{
+.books-wrapper{
 	background-color: grey;
-}
-
-.result-wrapper{
-	border: 1px solid black;
-	/deep/ b{
-		color: green !important;
-	}
+	max-width: 600px;
+	margin: auto;
 }

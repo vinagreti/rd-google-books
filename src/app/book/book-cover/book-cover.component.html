@@ -1,0 +1,17 @@
+<md-card class="book-wrapper">
+	<md-card-header>
+		<img md-card-avatar [src]="book.volumeInfo.imageLinks?.smallThumbnail" />
+		<md-card-title [innerHtml]="highlightWords(book.volumeInfo.title)"></md-card-title>
+		<md-card-subtitle>Dog Breed</md-card-subtitle>
+	</md-card-header>
+	<!-- <img md-card-image [src]="book.volumeInfo.imageLinks?.thumbnail"> -->
+	<md-card-content>
+		<div *ngIf="book.searchInfo">
+			<p [innerHtml]="highlightWords(book.searchInfo.textSnippet)"></p>
+		</div>
+	</md-card-content>
+	<md-card-actions>
+		<button md-button>LIKE</button>
+		<button md-button>SHARE</button>
+	</md-card-actions>
+</md-card>

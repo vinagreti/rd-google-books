@@ -1,0 +1,13 @@
+// Import Angular Material Design components themes
+@import '~@angular/material/theming';
+
+// Apply Angular Material Design global styles
+@include mat-core();
+
+// Default App Custom theme
+$primary: mat-palette($mat-blue, 600);
+$accent: mat-palette($mat-green, A400);
+$warn: mat-palette($mat-red, 600);
+$theme: mat-light-theme($primary, $accent, $warn);
+
+@include angular-material-theme($theme);

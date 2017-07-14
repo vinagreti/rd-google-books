@@ -4,17 +4,14 @@
   <input type="text" name="searchTerm" minlength="3" formControlName="searchTerm">
 </form>
 
-<h2 *ngIf="results" [ngSwitch]="results?.length == 0">
+<h2 *ngIf="books" [ngSwitch]="books?.length == 0">
 	<span *ngSwitchCase="false">Resultados para "{{searchForm.controls.searchTerm.value}}".</span>
-	<span *ngSwitchCase="true">Nenhum resultados enonctrado para "{{searchForm.controls.searchTerm.value}}".</span>
+	<span *ngSwitchCase="true">Nenhum bookados enonctrado para "{{searchForm.controls.searchTerm.value}}".</span>
 </h2>
 
-<div class="results-wrapper">
-	<div *ngFor="let result of results" class="result-wrapper">
-		<div><strong>Title:</strong> <span [innerHtml]="highlightWords(result.volumeInfo.title)"></span></div>
-		<div *ngIf="result.searchInfo">
-			<strong>Snippet:</strong> <span [innerHtml]="highlightWords(result.searchInfo.textSnippet)"></span>
-		</div>
+<div class="books-wrapper">
+	<div *ngFor="let book of books" class="book-wrapper">
+		<app-book-cover [book]="book" highlight="{{searchForm.controls.searchTerm.value}}"></app-book-cover>
 	</div>
 </div>
 

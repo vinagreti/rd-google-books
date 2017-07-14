@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { GoogleBooksService } from './google-books';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -10,18 +9,16 @@ import { Subject } from 'rxjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  results: any[];
+  books: any[];
   errors: any[];
   searchForm: FormGroup;
 
   private searchTerm = new Subject<string>();
   private _searchTerm: string;
-  private regexSearchTerm: RegExp;
 
   constructor(
     private gbService: GoogleBooksService,
     private formBuilder: FormBuilder,
-    private sanitizer: DomSanitizer
   ){
     this.startForm();
     this.subscribeToSearchQuery();
@@ -35,10 +32,9 @@ export class AppComponent {
       .subscribe(term => {
         if(term){
           this._searchTerm = term;
-          this.regexSearchTerm = new RegExp(`(${term})`, 'ig');
           this.search();
         } else {
-          this.results = undefined;
+          this.books = undefined;
         }
       });
   }
@@ -60,20 +56,9 @@ export class AppComponent {
   private search(): void {
     this.gbService.find({q: this._searchTerm})
     .then(res => {
-      this.results = res.items || [];
+      this.books = res.items || [];
     }).catch(err => {
       this.errors = err;
     });
-  }
-
-  /*
-  * Should be improved to remove diacritics
-  */
-  private addHighlightTags = (html: string): string => {
-    return html.replace(this.regexSearchTerm, '<b>$1</b>');
-  }
-
-  highlightWords = (html: string): SafeHtml => {
-    return this.sanitizer.bypassSecurityTrustHtml(this.addHighlightTags(html));
   }
 }
