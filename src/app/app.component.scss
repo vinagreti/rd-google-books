@@ -4,4 +4,7 @@
 
 .result-wrapper{
 	border: 1px solid black;
+	/deep/ b{
+		color: green !important;
+	}
 }

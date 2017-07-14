@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { GoogleBooksService } from './google-books';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -11,19 +12,19 @@ import { Subject } from 'rxjs';
 export class AppComponent {
   results: any[];
   errors: any[];
-  resources: any;
   searchForm: FormGroup;
 
   private searchTerm = new Subject<string>();
+  private _searchTerm;
 
   constructor(
     private gbService: GoogleBooksService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private sanitizer: DomSanitizer
   ){
     this.startForm();
     this.subscribeToSearchQuery();
     this.observeSearchTerm();
-    this.resources = this.gbService.RESOURCES;
   }
 
   private observeSearchTerm(){
@@ -31,30 +32,40 @@ export class AppComponent {
       .debounceTime(600) //Wait for 300ms pause in events
       .distinctUntilChanged()   //Ignore if next search term is same as previous
       .subscribe(term => {
-        this.search(term);
+        if(term){
+          this._searchTerm = term;
+          this.search();
+        } else {
+          this.results = undefined;
+        }
       });
   }
 
   private subscribeToSearchQuery(){
     this.searchForm.controls.searchTerm.valueChanges.subscribe(searchTerm => {
-      this.searchTerm.next(searchTerm);
+      if(this.searchForm.controls.searchTerm.valid){
+        this.searchTerm.next(searchTerm);
+      }
     });
   }
 
   private startForm(){
     this.searchForm = this.formBuilder.group({
-      searchTerm: ['']
+      searchTerm: ['', [Validators.minLength(3)]]
     })
   }
 
-  private search(term: string): void {
-    this.gbService.find('volumes', {q: term})
+  private search(): void {
+    this.gbService.find({q: this._searchTerm})
     .then(res => {
-      this.results = res.items;
+      this.results = res.items || [];
     }).catch(err => {
       this.errors = err;
     });
   }
 
+  highlightWords = (html: string): SafeHtml => {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
+  }
 
 }

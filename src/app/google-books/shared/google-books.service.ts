@@ -6,10 +6,6 @@ export class GoogleBooksService {
 
 	private GBendpoint = 'https://www.googleapis.com/books/v1/';
 
-	RESOURCES = [
-		{label: 'Volumes', value: 'volumes'}
-	];
-
 	constructor(
 		private http: Http
 	) {}
@@ -26,9 +22,9 @@ export class GoogleBooksService {
         return body || {};
     };
 
-	private getEndpoint(resource, query): string{
+	private getEndpoint(query): string{
 		let querystrings = this.getQueryStrings(query);
-		return `${this.GBendpoint}${resource}?${querystrings}`;
+		return `${this.GBendpoint}volumes?${querystrings}`;
 	}
 
 	private getQueryStrings(query: any): string{
@@ -40,8 +36,8 @@ export class GoogleBooksService {
 		return querystrings;
 	}
 
-	find = (resource, query) => {
-		return this.http.get(this.getEndpoint(resource, query))
+	find = (query) => {
+		return this.http.get(this.getEndpoint(query))
 		.toPromise()
 		.then(this.extractBody); // To promise because it is a single call
 	}

@@ -1,18 +1,19 @@
 <h1>Google Books Finder</h1>
 
 <form class="form" role="form" [formGroup]="searchForm">
-  <input type="text" name="searchTerm" formControlName="searchTerm">
+  <input type="text" name="searchTerm" minlength="3" formControlName="searchTerm">
 </form>
 
-<div class="resources-wrapper">
-	{{resources  | json}}
-</div>
+<h2 *ngIf="results" [ngSwitch]="results?.length == 0">
+	<span *ngSwitchCase="false">Resultados para "{{searchForm.controls.searchTerm.value}}".</span>
+	<span *ngSwitchCase="true">Nenhum resultados enonctrado para "{{searchForm.controls.searchTerm.value}}".</span>
+</h2>
 
 <div class="results-wrapper">
 	<div *ngFor="let result of results" class="result-wrapper">
-		<div><b>Title:</b> {{result.volumeInfo.title}}</div>
+		<div><strong>Title:</strong> {{result.volumeInfo.title}}</div>
 		<div *ngIf="result.searchInfo">
-			<b>Snippet:</b> <span [innerHtml]="result.searchInfo.textSnippet"></span>
+			<strong>Snippet:</strong> <span [innerHtml]="highlightWords(result.searchInfo.textSnippet)"></span>
 		</div>
 	</div>
 </div>
