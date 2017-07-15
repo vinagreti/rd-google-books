@@ -6,8 +6,8 @@
 	</md-card-header>
 	<!-- <img md-card-image [src]="book.volumeInfo.imageLinks?.thumbnail"> -->
 	<md-card-content>
-		<div *ngIf="book.searchInfo">
-			<p [innerHtml]="highlightWords(book.searchInfo.textSnippet)"></p>
+		<div *ngIf="book.volumeInfo">
+			<p [innerHtml]="highlightWords(book.volumeInfo.description)"></p>
 		</div>
 	</md-card-content>
 	<md-card-actions>

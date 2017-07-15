@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 
@@ -23,6 +23,7 @@ export class AppComponent implements OnInit{
     private activatedRoute: ActivatedRoute,
     private gbService: GoogleBooksService,
     private formBuilder: FormBuilder,
+    private router: Router
   ){
     this.startForm();
     this.subscribeToSearchQuery();
@@ -50,11 +51,19 @@ export class AppComponent implements OnInit{
       .subscribe(term => {
         if(term){
           this._searchTerm = term;
+          this.changeQueryInUrl(term);
           this.search();
         } else {
           this.books = undefined;
         }
       });
+  }
+
+  private changeQueryInUrl(term){
+    let navigationExtras: NavigationExtras = {
+      queryParams: {q: term},
+    };
+    this.router.navigate(['/'], navigationExtras);
   }
 
   private subscribeToSearchQuery(){

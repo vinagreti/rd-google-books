@@ -5,7 +5,7 @@
 	  <input type="text" name="searchTerm" minlength="3" formControlName="searchTerm">
 	</form>
 
-	<h2 *ngIf="books" [ngSwitch]="books?.length == 0">
+	<h2 *ngIf="books && !searchingBooks" [ngSwitch]="books?.length == 0">
 		<span *ngSwitchCase="false">Resultados para "{{searchForm.controls.searchTerm.value}}".</span>
 		<span *ngSwitchCase="true">Nenhum bookados enonctrado para "{{searchForm.controls.searchTerm.value}}".</span>
 	</h2>
