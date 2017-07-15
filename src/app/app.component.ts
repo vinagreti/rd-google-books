@@ -52,19 +52,12 @@ export class AppComponent implements OnInit{
       .subscribe(term => {
         if(term){
           this._searchTerm = term;
-          this.updateUrlQuery();
+          this.updateUrlParams();
           this.search();
         } else {
           this.books = undefined;
         }
       });
-  }
-
-  private updateUrlQuery(){
-    let navigationExtras: NavigationExtras = {
-      queryParams: {q: this._searchTerm},
-    };
-    this.router.navigate(['/'], navigationExtras);
   }
 
   private subscribeToSearchQuery(){
@@ -100,25 +93,36 @@ export class AppComponent implements OnInit{
     });
   }
 
-  private goToPage(){
+  private updateUrlParams(){
+    let queryParams: any = {
+      q: this._searchTerm
+    }
+
+
     let navigationExtras: NavigationExtras = {
       queryParams: {
-        q: this._searchTerm,
-        page: this.page
-      },
+        q: this._searchTerm
+      }
     };
+    
+    if(this.page > 1){
+     navigationExtras.queryParams.page = this.page;
+    }
+
     this.router.navigate(['/'], navigationExtras);
   }
 
   previous(){
-    this.page--;
-    this.goToPage();
-    this.search();
+    if(this.page > 1){
+      this.page--;
+      this.updateUrlParams();
+      this.search();
+    }
   }
 
   next(){
     this.page++;
-    this.goToPage();
+    this.updateUrlParams();
     this.search();
   }
 }
