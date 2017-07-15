@@ -15,6 +15,7 @@ export class AppComponent implements OnInit{
   errors: any[];
   searchForm: FormGroup;
   searchingBooks: boolean;
+  page: number = 1;
 
   private searchTerm = new Subject<string>();
   private _searchTerm: string;
@@ -24,19 +25,19 @@ export class AppComponent implements OnInit{
     private gbService: GoogleBooksService,
     private formBuilder: FormBuilder,
     private router: Router
-  ){
+  ){}
+
+  ngOnInit(){
     this.startForm();
     this.subscribeToSearchQuery();
     this.observeSearchTerm();
     this.subscribeToQueryParam();
   }
 
-  ngOnInit(){
-  }
-
   private subscribeToQueryParam(){
     this.activatedRoute.queryParams.subscribe((params: Params) => {
       let searhTerm = params['q'];
+      let page = params['page'];
       this.searchForm.controls.searchTerm.setValue(searhTerm);
     });
   };
@@ -51,7 +52,7 @@ export class AppComponent implements OnInit{
       .subscribe(term => {
         if(term){
           this._searchTerm = term;
-          this.changeQueryInUrl(term);
+          this.updateUrlQuery();
           this.search();
         } else {
           this.books = undefined;
@@ -59,9 +60,9 @@ export class AppComponent implements OnInit{
       });
   }
 
-  private changeQueryInUrl(term){
+  private updateUrlQuery(){
     let navigationExtras: NavigationExtras = {
-      queryParams: {q: term},
+      queryParams: {q: this._searchTerm},
     };
     this.router.navigate(['/'], navigationExtras);
   }
@@ -80,9 +81,16 @@ export class AppComponent implements OnInit{
     })
   }
 
+  private getStartIndex(): number{
+    return this.page * 10 - 10;
+  }
+
   private search(): void {
     this.searchingBooks = true;
-    this.gbService.find({q: this._searchTerm})
+    this.gbService.find({
+      q: this._searchTerm,
+      startIndex: this.getStartIndex()
+    })
     .then(res => {
       this.books = res.items || [];
       this.searchingBooks = false;
@@ -90,5 +98,27 @@ export class AppComponent implements OnInit{
       this.errors = err;
       this.searchingBooks = false;
     });
+  }
+
+  private goToPage(){
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        q: this._searchTerm,
+        page: this.page
+      },
+    };
+    this.router.navigate(['/'], navigationExtras);
+  }
+
+  previous(){
+    this.page--;
+    this.goToPage();
+    this.search();
+  }
+
+  next(){
+    this.page++;
+    this.goToPage();
+    this.search();
   }
 }
