@@ -1,3 +1,5 @@
+import { GoogleBooksService } from './../google-books';
+
 class AccessInfo {
     country: string;
     viewability: string;

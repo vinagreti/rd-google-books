@@ -1,14 +1,31 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { JsonStorageService } from './../../json-storage/json-storage.service';
+import { Book } from './../../book/';
 
 @Injectable()
 export class GoogleBooksService {
 
 	private GBendpoint = 'https://www.googleapis.com/books/v1/';
+	
+	favorites: string[];
 
 	constructor(
-		private http: Http
-	) {}
+		private http: Http,
+    	private db: JsonStorageService,
+	) {
+		this.subscribeToFavorites();
+	}
+
+	private subscribeToFavorites(){
+		this.db.object('favorites').subscribe(favorites => {
+			this.favorites = favorites;
+		})
+	}
+
+	private updateFavorites(){
+		this.db.set('favorites', this.favorites);
+	}
 
     private extractBody = (response) => {
         var body;
@@ -42,4 +59,30 @@ export class GoogleBooksService {
 		.then(this.extractBody); // To promise because it is a single call
 	}
 
+	isFavorite = (book: Book): boolean => {
+		if(this.favorites){
+			return this.favorites.indexOf(book.etag) >= 0;
+		} else {
+			return false;
+		}
+	}
+
+	addFavorite = (book: Book) => {
+		if(!this.favorites){
+			this.favorites = [book.etag]
+		} else {
+			this.favorites.push(book.etag);
+		}
+		this.updateFavorites();
+	}
+
+	removeFavorite = (book: Book) => {
+		if(this.favorites){
+			let etagIndex = this.favorites.indexOf(book.etag);
+			if(etagIndex >= 0){
+				this.favorites.splice(etagIndex, 1);
+				this.updateFavorites();
+			}
+		}
+	}
 }

@@ -10,8 +10,10 @@
 			<p [innerHtml]="highlightWords(book.volumeInfo.description)"></p>
 		</div>
 	</md-card-content>
-	<md-card-actions>
-		<button md-button>LIKE</button>
-		<button md-button>SHARE</button>
+	<md-card-actions align="end">
+		<button md-icon-button (click)="toggleFavorite(book)" [color]="isFavorite(book) ? 'primary' : 'default'" title="Favorito">
+			<md-icon svgIcon="thumbs-up"></md-icon>
+		</button>
+		<button md-button>Saiba mais...</button>
 	</md-card-actions>
 </md-card>
