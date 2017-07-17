@@ -1,0 +1,24 @@
+<form class="form" role="form" [formGroup]="searchForm">
+  <input type="text" name="searchTerm" minlength="3" formControlName="searchTerm">
+</form>
+
+<h2 *ngIf="books && !searchingBooks" [ngSwitch]="books?.length == 0">
+	<span *ngSwitchCase="false">Resultados para "{{searchForm.controls.searchTerm.value}}".</span>
+	<span *ngSwitchCase="true">Nenhum bookados enonctrado para "{{searchForm.controls.searchTerm.value}}".</span>
+</h2>
+
+<div [ngSwitch]="searchingBooks">
+	
+	<h2 *ngSwitchCase="true">Buscando livros. Aguarde...</h2>
+	
+	<div class="books-wrapper" *ngSwitchCase="false">
+		<app-book-list
+			[books]="books"
+			[highlight]="searchForm.controls.searchTerm.value"
+		></app-book-list>
+	</div>
+	<div>
+		<button type="button" (click)="previous()">Anterior</button>
+		<button type="button" (click)="next()">Próxima</button>
+	</div>
+</div>

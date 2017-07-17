@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { GoogleBooksService } from './../../google-books';
-import { Book } from './../book.model';
+import { GoogleBooksService } from './../google-books';
+import { Book } from './../';
 
 @Component({
 	selector: 'app-book-cover',

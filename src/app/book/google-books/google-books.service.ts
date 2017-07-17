@@ -8,18 +8,23 @@ export class GoogleBooksService {
 
 	private GBendpoint = 'https://www.googleapis.com/books/v1/';
 	
-	favorites: string[];
+	favorites: any;
 
 	constructor(
 		private http: Http,
     	private db: JsonStorageService,
 	) {
+		this.initFavorites();
 		this.subscribeToFavorites();
+	}
+
+	private initFavorites(){
+		this.favorites = {};
 	}
 
 	private subscribeToFavorites(){
 		this.db.object('favorites').subscribe(favorites => {
-			this.favorites = favorites;
+			this.favorites = favorites || {};
 		})
 	}
 
@@ -60,29 +65,16 @@ export class GoogleBooksService {
 	}
 
 	isFavorite = (book: Book): boolean => {
-		if(this.favorites){
-			return this.favorites.indexOf(book.etag) >= 0;
-		} else {
-			return false;
-		}
+		return this.favorites[book.etag] ? true : false;
 	}
 
 	addFavorite = (book: Book) => {
-		if(!this.favorites){
-			this.favorites = [book.etag]
-		} else {
-			this.favorites.push(book.etag);
-		}
+		this.favorites[book.etag] = book;
 		this.updateFavorites();
 	}
 
 	removeFavorite = (book: Book) => {
-		if(this.favorites){
-			let etagIndex = this.favorites.indexOf(book.etag);
-			if(etagIndex >= 0){
-				this.favorites.splice(etagIndex, 1);
-				this.updateFavorites();
-			}
-		}
+		delete this.favorites[book.etag];
+		this.updateFavorites();
 	}
 }
