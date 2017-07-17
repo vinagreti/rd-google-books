@@ -44,9 +44,14 @@ export class GoogleBooksService {
         return body || {};
     };
 
-	private getEndpoint(query): string{
-		let querystrings = this.getQueryStrings(query);
-		return `${this.GBendpoint}volumes?${querystrings}`;
+	private getEndpoint(type, data): string{
+		switch (type) {
+			case "query":
+				let querystrings = this.getQueryStrings(data);
+				return `${this.GBendpoint}volumes?${querystrings}`;
+			case "object":
+				return `${this.GBendpoint}volumes/${data}`;
+		}
 	}
 
 	private getQueryStrings(query: any): string{
@@ -59,22 +64,28 @@ export class GoogleBooksService {
 	}
 
 	find = (query) => {
-		return this.http.get(this.getEndpoint(query))
+		return this.http.get(this.getEndpoint('query', query))
+		.toPromise()
+		.then(this.extractBody); // To promise because it is a single call
+	}
+
+	get = (book: Book) => {
+		return this.http.get(this.getEndpoint('object', book.id))
 		.toPromise()
 		.then(this.extractBody); // To promise because it is a single call
 	}
 
 	isFavorite = (book: Book): boolean => {
-		return this.favorites[book.etag] ? true : false;
+		return this.favorites[book.id] ? true : false;
 	}
 
 	addFavorite = (book: Book) => {
-		this.favorites[book.etag] = book;
+		this.favorites[book.id] = book;
 		this.updateFavorites();
 	}
 
 	removeFavorite = (book: Book) => {
-		delete this.favorites[book.etag];
+		delete this.favorites[book.id];
 		this.updateFavorites();
 	}
 }

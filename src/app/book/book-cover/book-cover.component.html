@@ -1,7 +1,7 @@
 <md-card class="book-wrapper">
 	<md-card-header>
 		<img md-card-avatar *ngIf="book.volumeInfo.imageLinks?.thumbnail" [src]="book.volumeInfo.imageLinks?.thumbnail" />
-		<md-card-title [routerLink]="['/', book.etag]" [innerHtml]="highlightWords(book.volumeInfo.title)"></md-card-title>
+		<md-card-title [routerLink]="['/', book.id]" [innerHtml]="highlightWords(book.volumeInfo.title)"></md-card-title>
 		<md-card-subtitle [innerHtml]="book.volumeInfo.subtitle"></md-card-subtitle>
 	</md-card-header>
 	<!-- <img md-card-image [src]="book.volumeInfo.imageLinks?.thumbnail"> -->
@@ -14,6 +14,6 @@
 		<button md-icon-button (click)="toggleFavorite(book)" [color]="isFavorite(book) ? 'primary' : 'default'" title="Favorito">
 			<md-icon svgIcon="thumbs-up"></md-icon>
 		</button>
-		<button md-button>Saiba mais...</button>
+		<button [routerLink]="['/', book.id]" md-button>Saiba mais...</button>
 	</md-card-actions>
 </md-card>

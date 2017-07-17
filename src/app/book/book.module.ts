@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MdCardModule, MdButtonModule, MdIconModule } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BookCenterComponent } from './book-center/book-center.component';
 import { BookComponent } from './book.component';
 import { BookCoverComponent } from './book-cover/book-cover.component';
 import { BookListComponent } from './book-list/book-list.component';
@@ -20,7 +19,6 @@ import { GoogleBooksService } from './google-books';
     RouterModule
   ],
   declarations: [
-    BookCenterComponent,
     BookComponent,
     BookCoverComponent,
     BookListComponent,

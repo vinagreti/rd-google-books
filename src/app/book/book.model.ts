@@ -1,6 +1,14 @@
+class AccessInfo{
+    webReaderLink: string;
+}
+
 class ImageLink{
     smallThumbnail: string;
-    thumbnail: string
+    thumbnail: string;
+    small: string;
+    medium: string;
+    large: string;
+    extraLarge: string;
 }
 
 class SearchInfo{
@@ -16,7 +24,7 @@ class VolumeInfo {
     description: string;
     pageCount: number;
     printType: string;
-    categories: any[];
+    categories: string[];
     contentVersion: string;
     imageLinks: ImageLink[];
     language: string;
@@ -29,4 +37,5 @@ export class Book {
     searchInfo: SearchInfo;
     selfLink: string;
     volumeInfo: VolumeInfo;
+    accessInfo: AccessInfo;
 }
