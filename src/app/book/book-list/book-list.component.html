@@ -1,5 +1,6 @@
-<div *ngFor="let book of books" class="book-list">
-	<app-book-cover 
+<div class="book-list">
+	<app-book-cover
+		*ngFor="let book of books" 
 		[book]="book"
 		[highlight]="highlight"
 	></app-book-cover>

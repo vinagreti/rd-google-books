@@ -2,3 +2,7 @@
 .hidden{
 	display: none;
 }
+
+[ng-reflect-router-link]{
+	cursor: pointer;
+}

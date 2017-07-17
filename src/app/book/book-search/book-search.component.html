@@ -11,7 +11,7 @@
 	
 	<h2 *ngSwitchCase="true">Buscando livros. Aguarde...</h2>
 	
-	<div class="books-wrapper" *ngSwitchCase="false">
+	<div *ngSwitchCase="false">
 		<app-book-list
 			[books]="books"
 			[highlight]="searchForm.controls.searchTerm.value"

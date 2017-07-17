@@ -1,11 +1,11 @@
 <md-card class="book-wrapper">
-	<md-card-header>
+	<md-card-header [routerLink]="['/', book.id]">
 		<img md-card-avatar *ngIf="book.volumeInfo.imageLinks?.thumbnail" [src]="book.volumeInfo.imageLinks?.thumbnail" />
 		<md-card-title [routerLink]="['/', book.id]" [innerHtml]="highlightWords(book.volumeInfo.title)"></md-card-title>
 		<md-card-subtitle [innerHtml]="book.volumeInfo.subtitle"></md-card-subtitle>
 	</md-card-header>
 	<!-- <img md-card-image [src]="book.volumeInfo.imageLinks?.thumbnail"> -->
-	<md-card-content>
+	<md-card-content [routerLink]="['/', book.id]">
 		<div *ngIf="book.volumeInfo">
 			<p [innerHtml]="highlightWords(book.volumeInfo.description)"></p>
 		</div>

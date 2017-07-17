@@ -6,11 +6,11 @@
 		<span class="img">
 			<img [src]="book.volumeInfo?.imageLinks?.small">
 		</span>
-		<p><b>Autores:</b> {{book.volumeInfo?.authors.join(', ')}}</p>
+		<p><b>Autores:</b> {{book.volumeInfo?.authors?.join(', ')}}</p>
 		<p><b>Editora:</b> {{book.volumeInfo?.publisher}}</p>
 		<p><b>Ano:</b> {{book.volumeInfo?.publishedDate}}</p>
 		<p><b>Número de páginas:</b> {{book.volumeInfo?.pageCount}}</p>
-		<p><b>Categorias:</b> {{book.volumeInfo?.categories.join(', ')}}</p>
+		<p><b>Categorias:</b> {{book.volumeInfo?.categories?.join(', ')}}</p>
 		<p><b>Descrição:</b> <span [innerHtml]="book.volumeInfo?.description"></span></p>
 		<a md-raised-button [href]="book.accessInfo?.webReaderLink" target="_blank">Ler</a>
 	</div>
