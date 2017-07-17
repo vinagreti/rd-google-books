@@ -38,4 +38,7 @@ export class BookComponent implements OnInit {
 		.then(book => this.book = book);
 	}
 
+	isFavorite = this.gbService.isFavorite;
+	toggleFavorite = this.gbService.toggleFavorite;
+	
 }

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MdIconRegistry } from '@angular/material';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
@@ -25,8 +23,6 @@ export class BookSearchComponent implements OnInit{
         private activatedRoute: ActivatedRoute,
         private formBuilder: FormBuilder,
         private gbService: GoogleBooksService,
-        private iconRegistry: MdIconRegistry,
-        private sanitizer: DomSanitizer,
         private router: Router
         ){}
 
@@ -35,14 +31,6 @@ export class BookSearchComponent implements OnInit{
         this.subscribeToSearchQuery();
         this.observeSearchTerm();
         this.subscribeToQueryParam();
-        this.registerIcons();
-    }
-
-    private registerIcons(){
-        this.iconRegistry.addSvgIcon(
-            'thumbs-up',
-            this.sanitizer.bypassSecurityTrustResourceUrl('assets/icons/thumbs-up.svg')
-            );
     }
 
     private subscribeToQueryParam(){

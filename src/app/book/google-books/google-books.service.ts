@@ -63,6 +63,16 @@ export class GoogleBooksService {
 		return querystrings;
 	}
 
+	private addFavorite = (book: Book) => {
+		this.favorites[book.id] = book;
+		this.updateFavorites();
+	}
+
+	private removeFavorite = (book: Book) => {
+		delete this.favorites[book.id];
+		this.updateFavorites();
+	}
+
 	find = (query) => {
 		return this.http.get(this.getEndpoint('query', query))
 		.toPromise()
@@ -79,13 +89,11 @@ export class GoogleBooksService {
 		return this.favorites[book.id] ? true : false;
 	}
 
-	addFavorite = (book: Book) => {
-		this.favorites[book.id] = book;
-		this.updateFavorites();
-	}
-
-	removeFavorite = (book: Book) => {
-		delete this.favorites[book.id];
-		this.updateFavorites();
+	toggleFavorite(book){
+		if(this.isFavorite(book)){
+			this.removeFavorite(book)
+		} else {
+			this.addFavorite(book)
+		}
 	}
 }

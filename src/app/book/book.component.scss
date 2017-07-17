@@ -3,12 +3,18 @@
 	margin: auto;
 
 	.book-details{
+		min-height: 450px;
 		.img{
 			float: right;
 			margin-left: 8px;
 			margin-bottom: 8px;
 			width: 300px;
 			height: 400px;
+
+			img{
+				width: 300px;
+				height: 400px;
+			}
 		}
 	}
 

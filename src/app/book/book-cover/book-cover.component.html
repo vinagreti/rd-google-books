@@ -14,6 +14,6 @@
 		<button md-icon-button (click)="toggleFavorite(book)" [color]="isFavorite(book) ? 'primary' : 'default'" title="Favorito">
 			<md-icon svgIcon="thumbs-up"></md-icon>
 		</button>
-		<button [routerLink]="['/', book.id]" md-button>Saiba mais...</button>
+		<a [routerLink]="['/', book.id]" md-button>Saiba mais...</a>
 	</md-card-actions>
 </md-card>

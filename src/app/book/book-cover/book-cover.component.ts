@@ -25,17 +25,10 @@ export class BookCoverComponent implements OnInit {
 	}
 	
 	isFavorite = this.gbService.isFavorite;
+	toggleFavorite = this.gbService.toggleFavorite;
 
 	ngOnInit() {
 		this.regexSearchTerm = new RegExp(`(${this.highlight})`, 'ig');
-	}
-
-	toggleFavorite(book){
-		if(this.isFavorite(book)){
-			this.gbService.removeFavorite(book)
-		} else {
-			this.gbService.addFavorite(book)
-		}
 	}
 
 	highlightWords = (html: string = ''): SafeHtml => {

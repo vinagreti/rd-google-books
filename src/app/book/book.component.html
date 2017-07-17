@@ -1,18 +1,25 @@
-<div class="book-wrapper">
+<md-card class="book-wrapper">
 	<h1>{{book.volumeInfo?.title}}</h1>
 	<h2>{{book.volumeInfo?.subtitle}}</h2>
-
-	<div class="book-details">
-		<span class="img">
-			<img [src]="book.volumeInfo?.imageLinks?.small">
-		</span>
-		<p><b>Autores:</b> {{book.volumeInfo?.authors?.join(', ')}}</p>
-		<p><b>Editora:</b> {{book.volumeInfo?.publisher}}</p>
-		<p><b>Ano:</b> {{book.volumeInfo?.publishedDate}}</p>
-		<p><b>Número de páginas:</b> {{book.volumeInfo?.pageCount}}</p>
-		<p><b>Categorias:</b> {{book.volumeInfo?.categories?.join(', ')}}</p>
-		<p><b>Descrição:</b> <span [innerHtml]="book.volumeInfo?.description"></span></p>
+	<md-card-header>
+	</md-card-header>
+	<md-card-content>
+		<div class="book-details">
+			<a class="img" *ngIf="book.volumeInfo?.imageLinks?.small" [href]="book.accessInfo?.webReaderLink" target="_blank">
+				<img [src]="book.volumeInfo?.imageLinks?.small">
+			</a>
+			<p><b>Autores:</b> {{book.volumeInfo?.authors?.join(', ')}}</p>
+			<p><b>Editora:</b> {{book.volumeInfo?.publisher}}</p>
+			<p><b>Ano:</b> {{book.volumeInfo?.publishedDate}}</p>
+			<p><b>Número de páginas:</b> {{book.volumeInfo?.pageCount}}</p>
+			<p><b>Categorias:</b> {{book.volumeInfo?.categories?.join(', ')}}</p>
+			<p><b>Descrição:</b> <span [innerHtml]="book.volumeInfo?.description"></span></p>
+		</div>
+	</md-card-content>
+	<md-card-actions align="end">
+		<button md-icon-button (click)="toggleFavorite(book)" [color]="isFavorite(book) ? 'primary' : 'default'" title="Favorito">
+			<md-icon svgIcon="thumbs-up"></md-icon>
+		</button>
 		<a md-raised-button [href]="book.accessInfo?.webReaderLink" target="_blank">Ler</a>
-	</div>
-</div>
-
+	</md-card-actions>
+</md-card>
