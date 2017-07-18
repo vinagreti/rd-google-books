@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-
+import { JsonStorageService } from './../../json-storage/json-storage.service';
 import { GoogleBooksService } from './../google-books/';
 
 @Component({
@@ -14,67 +14,69 @@ export class BookSearchComponent implements OnInit{
     books: any[];
     searchForm: FormGroup;
     searchingBooks: boolean;
-    page: number = 1;
+    page: number;
     totalPages: number;
     totalItems: number;
 
-    private searchTerm = new Subject<string>();
     private _searchTerm: string;
 
     constructor(
         private activatedRoute: ActivatedRoute,
+        private db: JsonStorageService,
         private formBuilder: FormBuilder,
         private gbService: GoogleBooksService,
         private router: Router
         ){}
 
     ngOnInit(){
-        this.startForm();
-        this.subscribeToSearchQuery();
-        this.observeSearchTerm();
         this.subscribeToQueryParam();
     }
 
     private subscribeToQueryParam(){
         this.activatedRoute.queryParams.subscribe((params: Params) => {
-            let searhTerm = params['q'];
-            let page = params['page'];
-            this.searchForm.controls.searchTerm.setValue(searhTerm);
+            this._searchTerm = params['q'];
+            this.page = params['page'] || 1;
+            this.startForm();
         });
     };
 
-    private observeSearchTerm(){
-        this.searchTerm
+    private subscribeToSearchTerm(){
+        this.searchForm.controls.searchTerm.valueChanges
         .debounceTime(500) //Wait for 300ms pause in events
         .map(val => {
             return val ? val.toLowerCase() : undefined;
         })
         .distinctUntilChanged()   //Ignore if next search term is same as previous
         .subscribe(term => {
-            this._searchTerm = term;
-            if(term){
-                this.updateUrlParams();
-                this.search();
-            } else {
-                this.updateUrlParams();
-                this.books = undefined;
+            if(this.searchForm.controls.searchTerm.valid){
+                this._searchTerm = term;
+                if(this.searchForm.controls.fastSearch.value){
+                    if(term){
+                        this.search();
+                    } else {
+                        this.books = undefined;
+                        this.updateUrlParams();
+                    }
+                }
             }
         });
     }
 
-    private subscribeToSearchQuery(){
-        this.searchForm.controls.searchTerm.valueChanges.subscribe(searchTerm => {
-            if(this.searchForm.controls.searchTerm.valid){
-                this.searchTerm.next(searchTerm);
-            }
+    private subscribeToFastSearch(){
+        this.searchForm.controls.fastSearch.valueChanges.subscribe(fastSearch => {
+            this.persistSearchConfigInMem({fastSearch: fastSearch});
         });
     }
 
     private startForm(){
         this.searchForm = this.formBuilder.group({
-            searchTerm: ['', [Validators.minLength(3)]],
+            searchTerm: [this._searchTerm, [Validators.minLength(3)]],
             fastSearch: [true, []]
-        })
+        });
+        this.search();
+        this.subscribeToSearchTerm();
+        this.subscribeToFastSearch();
+        this.getSearchConfigFromMem();
     }
 
     private getStartIndex(): number{
@@ -100,7 +102,19 @@ export class BookSearchComponent implements OnInit{
     }
 
     private calculateTotalPages(){
-        this.totalPages = Math.round(this.totalItems / 10);
+        this.totalPages = Math.round((this.totalItems + this.getStartIndex()) / 10);
+    }
+
+    private persistSearchConfigInMem(config){
+        this.db.set('frontendConfig', config);
+    }
+
+    private getSearchConfigFromMem(){
+        this.db.object('frontendConfig')
+        .toPromise()
+        .then((config = {}) => {
+           this.searchForm.controls.fastSearch.setValue(config.fastSearch);
+        });
     }
 
     previous(){
@@ -118,6 +132,7 @@ export class BookSearchComponent implements OnInit{
     }
 
     search(): void {
+        this.updateUrlParams();
         this.searchingBooks = true;
         this.gbService.find({
             q: this._searchTerm,

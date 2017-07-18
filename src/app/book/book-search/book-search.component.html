@@ -30,11 +30,11 @@
 
 	</div>
 
-	<div *ngIf="books && !searchingBooks" class="pagination">
+	<div *ngIf="books?.length && !searchingBooks" class="pagination">
 		<div class="page-counter">
-			{{page}}/{{totalPages}}
+			Página {{page}}
 		</div>
-		<button type="button" md-raised-button color="primary" (click)="previous()"> < Anterior</button>
-		<button type="button" md-raised-button color="primary" (click)="next()">Próxima > </button>
+		<button type="button" md-raised-button color="primary" *ngIf="page > 1" (click)="previous()"> < Anterior</button>
+		<button type="button" md-raised-button color="primary" *ngIf="page != totalPages" (click)="next()">Próxima > </button>
 	</div>
 </div>
