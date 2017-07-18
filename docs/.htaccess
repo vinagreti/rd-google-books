@@ -2,7 +2,6 @@ RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} -s [OR]
 RewriteCond %{REQUEST_FILENAME} -l [OR]
 RewriteCond %{REQUEST_FILENAME} -d
-RewriteCond $1 !^(assets|favicon.ico\.txt)
 RewriteRule ^.*$ - [NC,L]
 
 RewriteRule ^(.*) /index.html [NC,L]

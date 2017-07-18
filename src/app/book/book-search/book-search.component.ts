@@ -79,9 +79,7 @@ export class BookSearchComponent implements OnInit{
     }
 
     private updateUrlParams(searchTerm?){
-        if(searchTerm){
-            this.searchTerm = searchTerm
-        }
+        this.searchTerm = searchTerm
 
         let queryParams: any = {
             q: this.searchTerm
