@@ -11,3 +11,21 @@ $warn: mat-palette($mat-red, 600);
 $theme: mat-light-theme($primary, $accent, $warn);
 
 @include angular-material-theme($theme);
+
+
+// Button Styles
+.mat-button{
+	box-shadow: 0px 0px 0px 1px inset !important;
+}
+
+.mat-button[color="primary"]{
+    box-shadow: mat-color($primary);
+}
+
+.mat-button[color="accent"]{
+    box-shadow: mat-color($accent);
+}
+
+.mat-button[color="warn"]{
+    box-shadow: mat-color($warn);
+}

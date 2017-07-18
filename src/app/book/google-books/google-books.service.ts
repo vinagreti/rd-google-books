@@ -3,6 +3,11 @@ import { Http } from '@angular/http';
 import { JsonStorageService } from './../../json-storage/json-storage.service';
 import { Book, SearchResult } from './../../book/';
 
+export interface SearchQuery{
+	q: string;
+	startIndex: number;
+}
+
 @Injectable()
 export class GoogleBooksService {
 
@@ -63,7 +68,7 @@ export class GoogleBooksService {
 		}
 	}
 
-	private getQueryStrings(query: any): string{
+	private getQueryStrings(query: SearchQuery): string{
 		let querystrings = '';
 		Object.keys(query).forEach((param, index) => {
 			querystrings += index > 0 ? '&' : '';
@@ -82,17 +87,31 @@ export class GoogleBooksService {
 		this.updateFavorites();
 	}
 
-	find = (query): Promise<SearchResult> => {
-		if(this.searchs[query]){
-			return new Promise<SearchResult>((resolve, reject) => {
-				resolve(this.searchs[query]);
-			});
+	private getFromGb(endpoint){
+		return this.http.get(endpoint)
+		.toPromise() // To promise because it is a single call
+		.then(this.extractBody);
+	}
+
+	find = (query: SearchQuery): Promise<SearchResult> => {
+		if(this.searchs[query.q]){
+			if(this.searchs[query.q][query.startIndex || 1]){
+				return new Promise<SearchResult>((resolve, reject) => {
+					resolve(this.searchs[query.q][query.startIndex || 1]);
+				});
+			} else {
+				return this.getFromGb(this.getEndpoint('query', query))
+				.then((res) => {
+					this.searchs[query.q][query.startIndex || 1] = new SearchResult(res);
+					return res;
+				});
+			}
+			
 		} else {
-			return this.http.get(this.getEndpoint('query', query))
-			.toPromise() // To promise because it is a single call
-			.then(this.extractBody)
+			return this.getFromGb(this.getEndpoint('query', query))
 			.then((res) => {
-				this.searchs[query] = new SearchResult(res);
+				this.searchs[query.q] = {};
+				this.searchs[query.q][query.startIndex || 1] = new SearchResult(res);
 				return res;
 			});
 		}

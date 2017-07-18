@@ -1,31 +1,40 @@
-<form class="form" role="form" [formGroup]="searchForm">
-	<md-input-container>
-  		<input mdInput type="text" name="searchTerm" minlength="3" formControlName="searchTerm" placeholder="Pesquise por algum dado do livro">
-	</md-input-container>
-  	<button type="submit" md-button color="accent" (click)="search()">Pesquisar livro</button>
-	
-	<small>
-  		<md-checkbox formControlName="fastSearch">Busca rápida</md-checkbox>
-	</small>
-</form>
+<div class="search-wrapper">
+	<form class="form" role="form" [formGroup]="searchForm">
+		<md-input-container>
+	  		<input mdInput type="text" name="searchTerm" minlength="3" formControlName="searchTerm" placeholder="Pesquise por título, autor...">
+		</md-input-container>
+		<div class="search-buttons">
+		  	<button type="submit" md-button color="accent" (click)="search()">Pesquisar livro</button>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<small>
+		  		<md-checkbox formControlName="fastSearch">Busca rápida</md-checkbox>
+			</small>
+		</div>
+	</form>
 
-<h2 *ngIf="books && !searchingBooks" [ngSwitch]="books?.length == 0">
-	<span *ngSwitchCase="false">Resultados para "{{searchForm.controls.searchTerm.value}}".</span>
-	<span *ngSwitchCase="true">Nenhum bookados enonctrado para "{{searchForm.controls.searchTerm.value}}".</span>
-</h2>
+	<h2 *ngIf="books && !searchingBooks" [ngSwitch]="books?.length == 0">
+		<span *ngSwitchCase="false">{{totalItems}} resultados para "{{searchForm.controls.searchTerm.value}}".</span>
+		<span *ngSwitchCase="true">Nenhum livro encontrado para "{{searchForm.controls.searchTerm.value}}".</span>
+	</h2>
 
-<div [ngSwitch]="searchingBooks">
-	
-	<h2 *ngSwitchCase="true">Buscando livros. Aguarde...</h2>
-	
-	<div *ngSwitchCase="false">
-		<app-book-list
-			[books]="books"
-			[highlight]="searchForm.controls.searchTerm.value"
-		></app-book-list>
+	<div [ngSwitch]="searchingBooks">
+		
+		<h2 *ngSwitchCase="true">Buscando livros. Aguarde...</h2>
+		
+		<div *ngSwitchCase="false">
+			<app-book-list
+				[books]="books"
+				[highlight]="searchForm.controls.searchTerm.value"
+			></app-book-list>
+		</div>
+
 	</div>
-	<div>
-		<button type="button" md-raised-button (click)="previous()">Anterior</button>
-		<button type="button" md-raised-button (click)="next()">Próxima</button>
+
+	<div *ngIf="books && !searchingBooks" class="pagination">
+		<div class="page-counter">
+			{{page}}/{{totalPages}}
+		</div>
+		<button type="button" md-raised-button color="primary" (click)="previous()"> < Anterior</button>
+		<button type="button" md-raised-button color="primary" (click)="next()">Próxima > </button>
 	</div>
 </div>

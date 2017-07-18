@@ -1,0 +1,22 @@
+.search-wrapper{
+	width: 600px;
+	margin: auto;
+
+	md-input-container{
+		width: 100%;
+	}
+
+	.search-buttons{
+		text-align: center;
+	}
+
+	.pagination{
+		button:last-of-type{
+			float: right;
+		}
+
+		.page-counter{
+			text-align: center;
+		}
+	}
+}

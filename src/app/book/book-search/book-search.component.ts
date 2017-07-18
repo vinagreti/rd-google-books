@@ -15,6 +15,8 @@ export class BookSearchComponent implements OnInit{
     searchForm: FormGroup;
     searchingBooks: boolean;
     page: number = 1;
+    totalPages: number;
+    totalItems: number;
 
     private searchTerm = new Subject<string>();
     private _searchTerm: string;
@@ -97,6 +99,10 @@ export class BookSearchComponent implements OnInit{
         this.router.navigate(['/'], navigationExtras);
     }
 
+    private calculateTotalPages(){
+        this.totalPages = Math.round(this.totalItems / 10);
+    }
+
     previous(){
         if(this.page > 1){
             this.page--;
@@ -119,6 +125,8 @@ export class BookSearchComponent implements OnInit{
         })
         .then(res => {
             this.books = res.items || [];
+            this.totalItems = res.totalItems;
+            this.calculateTotalPages()
             this.searchingBooks = false;
         });
     }

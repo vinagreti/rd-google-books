@@ -12,7 +12,6 @@ import { BookCoverComponent } from './book-cover/book-cover.component';
 import { BookListComponent } from './book-list/book-list.component';
 import { BookSearchComponent } from './book-search/book-search.component';
 import { GoogleBooksService } from './google-books';
-import { BookCenterComponent } from './book-center/book-center.component';
 
 @NgModule({
   imports: [
@@ -30,7 +29,6 @@ import { BookCenterComponent } from './book-center/book-center.component';
     BookCoverComponent,
     BookListComponent,
     BookSearchComponent,
-    BookCenterComponent
   ],
   providers: [GoogleBooksService],
 })
