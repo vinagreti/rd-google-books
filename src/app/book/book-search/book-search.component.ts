@@ -78,7 +78,7 @@ export class BookSearchComponent implements OnInit{
         return this.page * 10 - 10;
     }
 
-    private updateUrlParams(searchTerm?){
+    private updateUrlParams(searchTerm = this.searchTerm){
         this.searchTerm = searchTerm
 
         let queryParams: any = {
