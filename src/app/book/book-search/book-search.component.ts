@@ -69,14 +69,15 @@ export class BookSearchComponent implements OnInit{
     }
 
     private startForm(){
-        this.searchForm = this.formBuilder.group({
-            searchTerm: [this._searchTerm, [Validators.minLength(3)]],
-            fastSearch: [true, []]
+        this.getSearchConfigFromMem((config) => {
+            this.searchForm = this.formBuilder.group({
+                searchTerm: [this._searchTerm, [Validators.minLength(3)]],
+                fastSearch: [config.fastSearch, []]
+            });
+            this.search();
+            this.subscribeToSearchTerm();
+            this.subscribeToFastSearch();
         });
-        this.search();
-        this.subscribeToSearchTerm();
-        this.subscribeToFastSearch();
-        this.getSearchConfigFromMem();
     }
 
     private getStartIndex(): number{
@@ -109,11 +110,10 @@ export class BookSearchComponent implements OnInit{
         this.db.set('frontendConfig', config);
     }
 
-    private getSearchConfigFromMem(){
-        this.db.object('frontendConfig')
-        .toPromise()
+    private getSearchConfigFromMem(cbk){
+        this.db.get('frontendConfig')
         .then((config = {}) => {
-           this.searchForm.controls.fastSearch.setValue(config.fastSearch);
+           cbk(config);
         });
     }
 

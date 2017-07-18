@@ -1,4 +1,4 @@
-<div class="search-wrapper">
+<div class="search-wrapper" *ngIf="searchForm">
 	<form class="form" role="form" [formGroup]="searchForm">
 		<md-input-container>
 	  		<input mdInput type="text" name="searchTerm" minlength="3" formControlName="searchTerm" placeholder="Pesquise por título, autor...">
@@ -7,7 +7,7 @@
 		  	<button type="submit" md-button color="accent" (click)="search()">Pesquisar livro</button>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<small>
-		  		<md-checkbox formControlName="fastSearch">Busca rápida</md-checkbox>
+		  		<md-checkbox formControlName="fastSearch" title="Busca sem precisar clicar no botão.">Busca rápida</md-checkbox>
 			</small>
 		</div>
 	</form>
