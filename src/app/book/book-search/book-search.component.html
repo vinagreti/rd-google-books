@@ -1,5 +1,12 @@
 <form class="form" role="form" [formGroup]="searchForm">
-  <input type="text" name="searchTerm" minlength="3" formControlName="searchTerm">
+	<md-input-container>
+  		<input mdInput type="text" name="searchTerm" minlength="3" formControlName="searchTerm" placeholder="Pesquise por algum dado do livro">
+	</md-input-container>
+  	<button type="submit" md-button color="accent" (click)="search()">Pesquisar livro</button>
+	
+	<small>
+  		<md-checkbox formControlName="fastSearch">Busca rápida</md-checkbox>
+	</small>
 </form>
 
 <h2 *ngIf="books && !searchingBooks" [ngSwitch]="books?.length == 0">
@@ -18,7 +25,7 @@
 		></app-book-list>
 	</div>
 	<div>
-		<button type="button" (click)="previous()">Anterior</button>
-		<button type="button" (click)="next()">Próxima</button>
+		<button type="button" md-raised-button (click)="previous()">Anterior</button>
+		<button type="button" md-raised-button (click)="next()">Próxima</button>
 	</div>
 </div>

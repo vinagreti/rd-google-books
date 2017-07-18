@@ -1,25 +1,34 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { JsonStorageService } from './../../json-storage/json-storage.service';
-import { Book } from './../../book/';
+import { Book, SearchResult } from './../../book/';
 
 @Injectable()
 export class GoogleBooksService {
 
 	private GBendpoint = 'https://www.googleapis.com/books/v1/';
 	
-	favorites: any;
+	private favorites: any;
+	private objects: any;
+	private searchs: any;
 
 	constructor(
 		private http: Http,
     	private db: JsonStorageService,
 	) {
+		console.log('GoogleBooksService STARTED')
 		this.initFavorites();
+		this.initMem();
 		this.subscribeToFavorites();
 	}
 
 	private initFavorites(){
 		this.favorites = {};
+	}
+
+	private initMem(){
+		this.searchs = {};
+		this.objects = {};
 	}
 
 	private subscribeToFavorites(){
@@ -73,23 +82,44 @@ export class GoogleBooksService {
 		this.updateFavorites();
 	}
 
-	find = (query) => {
-		return this.http.get(this.getEndpoint('query', query))
-		.toPromise()
-		.then(this.extractBody); // To promise because it is a single call
+	find = (query): Promise<SearchResult> => {
+		if(this.searchs[query]){
+			return new Promise<SearchResult>((resolve, reject) => {
+				resolve(this.searchs[query]);
+			});
+		} else {
+			return this.http.get(this.getEndpoint('query', query))
+			.toPromise() // To promise because it is a single call
+			.then(this.extractBody)
+			.then((res) => {
+				this.searchs[query] = new SearchResult(res);
+				return res;
+			});
+		}
 	}
 
 	get = (book: Book) => {
-		return this.http.get(this.getEndpoint('object', book.id))
-		.toPromise()
-		.then(this.extractBody); // To promise because it is a single call
+		if(this.objects[book.id]){
+			return new Promise<Book>((resolve, reject) => {
+				resolve(this.objects[book.id]);
+			});
+		} else {
+			return this.http.get(this.getEndpoint('object', book.id))
+			.toPromise() // To promise because it is a single call
+			.then(this.extractBody)
+			.then((res) => {
+				this.objects[book.id] = new Book(res);
+				return res;
+			});
+		}
 	}
 
 	isFavorite = (book: Book): boolean => {
 		return this.favorites[book.id] ? true : false;
 	}
 
-	toggleFavorite(book){
+	toggleFavorite = (book) => {
+		console.log('foi atualizado')
 		if(this.isFavorite(book)){
 			this.removeFavorite(book)
 		} else {

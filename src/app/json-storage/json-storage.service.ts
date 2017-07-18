@@ -17,7 +17,7 @@ export class JsonStorageService {
   private subscriptions: Array<StorageSubscription>;
 
   constructor(){
-    console.info('JSON STORAGE SERVICE STARTED');
+    console.info('JsonStorageService STARTED');
     this.checkIflocalStorageIsAvailable();
     this.subscriptions = Array<StorageSubscription>();
   }

@@ -43,17 +43,18 @@ export class BookSearchComponent implements OnInit{
 
     private observeSearchTerm(){
         this.searchTerm
-        .debounceTime(600) //Wait for 300ms pause in events
+        .debounceTime(500) //Wait for 300ms pause in events
         .map(val => {
             return val ? val.toLowerCase() : undefined;
         })
         .distinctUntilChanged()   //Ignore if next search term is same as previous
         .subscribe(term => {
+            this._searchTerm = term;
             if(term){
-                this._searchTerm = term;
                 this.updateUrlParams();
                 this.search();
             } else {
+                this.updateUrlParams();
                 this.books = undefined;
             }
         });
@@ -69,24 +70,13 @@ export class BookSearchComponent implements OnInit{
 
     private startForm(){
         this.searchForm = this.formBuilder.group({
-            searchTerm: ['', [Validators.minLength(3)]]
+            searchTerm: ['', [Validators.minLength(3)]],
+            fastSearch: [true, []]
         })
     }
 
     private getStartIndex(): number{
         return this.page * 10 - 10;
-    }
-
-    private search(): void {
-        this.searchingBooks = true;
-        this.gbService.find({
-            q: this._searchTerm,
-            startIndex: this.getStartIndex()
-        })
-        .then(res => {
-            this.books = res.items || [];
-            this.searchingBooks = false;
-        });
     }
 
     private updateUrlParams(){
@@ -119,5 +109,17 @@ export class BookSearchComponent implements OnInit{
         this.page++;
         this.updateUrlParams();
         this.search();
+    }
+
+    search(): void {
+        this.searchingBooks = true;
+        this.gbService.find({
+            q: this._searchTerm,
+            startIndex: this.getStartIndex()
+        })
+        .then(res => {
+            this.books = res.items || [];
+            this.searchingBooks = false;
+        });
     }
 }

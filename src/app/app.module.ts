@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from "@angular/http";
@@ -19,6 +20,7 @@ import 'hammerjs';
   imports: [
     AppRoutingModule,
     BookModule,
+    BrowserAnimationsModule,
     BrowserModule,
     HttpModule,
     JsonStorageModule,
