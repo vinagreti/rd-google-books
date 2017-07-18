@@ -88,17 +88,14 @@ export class BookSearchComponent implements OnInit{
         let navigationExtras: NavigationExtras = {
             queryParams: {}
         };
-
         if(this.searchTerm){
             navigationExtras.queryParams.q = this.searchTerm;
         } else {
             this.page = 1;
         }
-
         if(this.page > 1){
             navigationExtras.queryParams.page = this.page;
         }
-
         this.router.navigate(['/'], navigationExtras);
     }
 
