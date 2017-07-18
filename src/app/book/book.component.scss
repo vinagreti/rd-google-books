@@ -3,9 +3,9 @@
 		min-height: 450px;
 
 		img{
-			display: block;
 			width: 300px;
 			height: 400px;
+			display: block;
 			margin: auto;
 		}
 
@@ -13,8 +13,6 @@
 		{
 			.img{
 				float: right;
-				width: 300px;
-				height: 400px;
 				margin-left: 8px;
 				margin-bottom: 8px;
 			}
