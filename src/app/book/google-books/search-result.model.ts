@@ -8,6 +8,6 @@ export class SearchResult{
 	constructor(data: any = {}){
 		this.kind = data.kind || undefined;
 		this.totalItems = data.totalItems || undefined;
-		this.items = data.items || undefined;
+		this.items = data.items.map(item => new Book(item)) || undefined;
 	}
 }

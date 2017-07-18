@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Book } from './../google-books';
 
 @Component({
     selector: 'app-book-list',
@@ -6,7 +7,7 @@ import { Component, Input } from '@angular/core';
     styleUrls: ['./book-list.component.scss']
 })
 export class BookListComponent {
-    @Input() books: any[];
+    @Input() books: Book[];
     @Input() highlight: string;
     
     constructor(

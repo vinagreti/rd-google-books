@@ -117,7 +117,7 @@ export class GoogleBooksService {
 		}
 	}
 
-	get = (book: Book) => {
+	get = (book: Book): Promise<Book> => {
 		if(this.objects[book.id]){
 			return new Promise<Book>((resolve, reject) => {
 				resolve(this.objects[book.id]);

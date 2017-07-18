@@ -1,3 +1,5 @@
+import * as utils from './../../utils/string';
+
 class AccessInfo{
     webReaderLink: string;
 
@@ -15,12 +17,12 @@ class ImageLinks{
     extraLarge: string;
 
     constructor(data: any = {}){
-        this.smallThumbnail = data.smallThumbnail || undefined;
-        this.thumbnail = data.thumbnail || undefined;
-        this.small = data.small || undefined;
-        this.medium = data.medium || undefined;
-        this.large = data.large || undefined;
-        this.extraLarge = data.extraLarge || undefined;
+        this.smallThumbnail = utils.ensureCorrectProtocol(data.smallThumbnail) || undefined;
+        this.thumbnail = utils.ensureCorrectProtocol(data.thumbnail) || undefined;
+        this.small = utils.ensureCorrectProtocol(data.small) || undefined;
+        this.medium = utils.ensureCorrectProtocol(data.medium) || undefined;
+        this.large = utils.ensureCorrectProtocol(data.large) || undefined;
+        this.extraLarge = utils.ensureCorrectProtocol(data.extraLarge) || undefined;
     }
 }
 
