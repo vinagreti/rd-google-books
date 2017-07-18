@@ -17,8 +17,7 @@ export class BookSearchComponent implements OnInit{
     page: number;
     totalPages: number;
     totalItems: number;
-
-    private _searchTerm: string;
+    searchTerm: string;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -34,7 +33,7 @@ export class BookSearchComponent implements OnInit{
 
     private subscribeToQueryParam(){
         this.activatedRoute.queryParams.subscribe((params: Params) => {
-            this._searchTerm = params['q'];
+            this.searchTerm = params['q'];
             this.page = params['page'] || 1;
             this.startForm();
         });
@@ -46,17 +45,12 @@ export class BookSearchComponent implements OnInit{
         .map(val => {
             return val ? val.toLowerCase() : undefined;
         })
-        .distinctUntilChanged()   //Ignore if next search term is same as previous
-        .subscribe(term => {
+        .distinctUntilChanged()   //Ignore if next search searchTerm is same as previous
+        .subscribe(searchTerm => {
             if(this.searchForm.controls.searchTerm.valid){
-                this._searchTerm = term;
+                this.page = 1;
                 if(this.searchForm.controls.fastSearch.value){
-                    if(term){
-                        this.search();
-                    } else {
-                        this.books = undefined;
-                        this.updateUrlParams();
-                    }
+                    this.updateUrlParams(searchTerm);
                 }
             }
         });
@@ -71,7 +65,7 @@ export class BookSearchComponent implements OnInit{
     private startForm(){
         this.getSearchConfigFromMem((config) => {
             this.searchForm = this.formBuilder.group({
-                searchTerm: [this._searchTerm, [Validators.minLength(3)]],
+                searchTerm: [this.searchTerm, [Validators.minLength(3)]],
                 fastSearch: [config.fastSearch, []]
             });
             this.search();
@@ -84,14 +78,18 @@ export class BookSearchComponent implements OnInit{
         return this.page * 10 - 10;
     }
 
-    private updateUrlParams(){
+    private updateUrlParams(searchTerm?){
+        if(searchTerm){
+            this.searchTerm = searchTerm
+        }
+
         let queryParams: any = {
-            q: this._searchTerm
+            q: this.searchTerm
         }
 
         let navigationExtras: NavigationExtras = {
             queryParams: {
-                q: this._searchTerm
+                q: this.searchTerm
             }
         };
 
@@ -100,10 +98,6 @@ export class BookSearchComponent implements OnInit{
         }
 
         this.router.navigate(['/'], navigationExtras);
-    }
-
-    private calculateTotalPages(){
-        this.totalPages = Math.round((this.totalItems + this.getStartIndex()) / 10);
     }
 
     private persistSearchConfigInMem(config){
@@ -121,28 +115,30 @@ export class BookSearchComponent implements OnInit{
         if(this.page > 1){
             this.page--;
             this.updateUrlParams();
-            this.search();
         }
     }
 
     next(){
         this.page++;
         this.updateUrlParams();
-        this.search();
     }
 
     search(): void {
-        this.updateUrlParams();
-        this.searchingBooks = true;
-        this.gbService.find({
-            q: this._searchTerm,
-            startIndex: this.getStartIndex()
-        })
-        .then(res => {
-            this.books = res.items || [];
-            this.totalItems = res.totalItems;
-            this.calculateTotalPages()
-            this.searchingBooks = false;
-        });
+        this.searchTerm = this.searchForm.controls.searchTerm.value;
+        if(this.searchTerm){
+            this.searchingBooks = true;
+            this.gbService.find({
+                q: this.searchTerm,
+                startIndex: this.getStartIndex()
+            })
+            .then(res => {
+                this.books = res.items || [];
+                this.totalItems = res.totalItems;
+                this.searchingBooks = false;
+            });
+        } else {
+            this.page = 1;
+            this.books = undefined;
+        }
     }
 }

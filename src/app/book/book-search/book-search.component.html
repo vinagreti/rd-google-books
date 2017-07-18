@@ -13,7 +13,7 @@
 	</form>
 
 	<h2 *ngIf="books && !searchingBooks" [ngSwitch]="books?.length == 0">
-		<span *ngSwitchCase="false">{{totalItems}} resultados para "{{searchForm.controls.searchTerm.value}}".</span>
+		<span *ngSwitchCase="false">{{totalItems}} resultados para "{{searchTerm}}".</span>
 		<span *ngSwitchCase="true">Nenhum livro encontrado para "{{searchForm.controls.searchTerm.value}}".</span>
 	</h2>
 
