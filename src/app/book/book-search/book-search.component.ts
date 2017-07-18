@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { JsonStorageService } from './../../json-storage/json-storage.service';
-import { GoogleBooksService } from './../google-books/';
+import { GoogleBooksService, Book, SearchResult } from './../google-books/';
 
 @Component({
     selector: 'app-book-search',
@@ -11,7 +11,7 @@ import { GoogleBooksService } from './../google-books/';
     styleUrls: ['./book-search.component.scss']
 })
 export class BookSearchComponent implements OnInit{
-    books: any[];
+    books: Book[];
     searchForm: FormGroup;
     searchingBooks: boolean;
     page: number;
@@ -129,7 +129,7 @@ export class BookSearchComponent implements OnInit{
                 q: this.searchTerm,
                 startIndex: this.getStartIndex()
             })
-            .then(res => {
+            .then((res: SearchResult) => {
                 this.books = res.items || [];
                 this.totalItems = res.totalItems;
                 this.searchingBooks = false;

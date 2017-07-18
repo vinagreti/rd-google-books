@@ -101,17 +101,19 @@ export class GoogleBooksService {
 				});
 			} else {
 				return this.getFromGb(this.getEndpoint('query', query))
-				.then((res) => {
-					this.searchs[query.q][query.startIndex || 1] = new SearchResult(res);
+				.then((res: SearchResult) => {
+					res = new SearchResult(res);
+					this.searchs[query.q][query.startIndex || 1] = res;
 					return res;
 				});
 			}
 			
 		} else {
 			return this.getFromGb(this.getEndpoint('query', query))
-			.then((res) => {
+			.then((res: SearchResult) => {
+				res = new SearchResult(res);
 				this.searchs[query.q] = {};
-				this.searchs[query.q][query.startIndex || 1] = new SearchResult(res);
+				this.searchs[query.q][query.startIndex || 1] = res;
 				return res;
 			});
 		}
