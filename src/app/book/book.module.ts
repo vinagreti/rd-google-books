@@ -11,10 +11,11 @@ import { BookComponent } from './book.component';
 import { BookCoverComponent } from './book-cover/book-cover.component';
 import { BookListComponent } from './book-list/book-list.component';
 import { BookSearchComponent } from './book-search/book-search.component';
-import { GoogleBooksService } from './google-books';
+import { GoogleBooksModule } from './google-books/google-books.module';
 
 @NgModule({
   imports: [
+    GoogleBooksModule,
     CommonModule,
     MdCardModule,
     MdCheckboxModule,
@@ -30,6 +31,5 @@ import { GoogleBooksService } from './google-books';
     BookListComponent,
     BookSearchComponent,
   ],
-  providers: [GoogleBooksService],
 })
 export class BookModule { }

@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MaterialModule } from '@angular/material';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { BookListComponent } from './book-list.component';
+import { BookCoverComponent } from './../book-cover/book-cover.component';
 
 describe('BookListComponent', () => {
   let component: BookListComponent;
@@ -8,7 +11,11 @@ describe('BookListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BookListComponent ]
+      declarations: [ BookListComponent, BookCoverComponent ],
+      imports: [
+        MaterialModule,
+        RouterTestingModule
+      ]
     })
     .compileComponents();
   }));

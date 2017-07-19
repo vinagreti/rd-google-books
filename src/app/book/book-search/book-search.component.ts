@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { JsonStorageService } from './../../json-storage/json-storage.service';
-import { GoogleBooksService, Book, SearchResult } from './../google-books/';
+import { GoogleBooksService }  from './../google-books/google-books.service';
+import { Book }  from './../google-books/book.model';
+import { SearchResult } from './../google-books/search-result.model';
 
 interface SearchConfig{
     fastSearch: boolean;
@@ -28,7 +30,7 @@ export class BookSearchComponent implements OnInit{
         private db: JsonStorageService,
         private formBuilder: FormBuilder,
         private gbService: GoogleBooksService,
-        private router: Router
+        private router: Router,
     ){}
 
     ngOnInit(){

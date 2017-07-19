@@ -1,4 +1,4 @@
-<md-card class="book-wrapper">
+<md-card class="book-wrapper" *ngIf="book">
 	<md-card-header [routerLink]="['/', book.id]">
 		<img md-card-avatar *ngIf="book.volumeInfo.imageLinks?.thumbnail" [src]="book.volumeInfo.imageLinks?.thumbnail" />
 		<md-card-title [routerLink]="['/', book.id]" [innerHtml]="highlightWords(book.volumeInfo.title)"></md-card-title>
