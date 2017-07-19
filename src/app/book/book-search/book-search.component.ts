@@ -7,7 +7,7 @@ import { GoogleBooksService }  from './../google-books/google-books.service';
 import { Book }  from './../google-books/book.model';
 import { SearchResult } from './../google-books/search-result.model';
 
-interface SearchConfig{
+class SearchConfig{
     fastSearch: boolean;
 }
 
@@ -31,7 +31,9 @@ export class BookSearchComponent implements OnInit{
         private formBuilder: FormBuilder,
         private gbService: GoogleBooksService,
         private router: Router,
-    ){}
+    ){
+        this.searchConfig = new SearchConfig();
+    }
 
     ngOnInit(){
         this.subscribeToQueryParam()
@@ -44,7 +46,9 @@ export class BookSearchComponent implements OnInit{
     private getSearchConfigFromMem = () => {
         return this.db.get('frontendConfig')
         .then((config: SearchConfig) => {
-            this.searchConfig = config;
+            if(config){
+                this.searchConfig = config;
+            }
         });
     }
 
